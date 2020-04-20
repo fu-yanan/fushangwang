@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huae.dao.StoreTypeDao">
+ 	<select id="getStoreType" resultType="StoreType">
+ 		select * from typenum order by navigation
+ 	</select>
+ 	<select id="typeNum" resultType="java.lang.Integer">
+ 		select count(*) from typenum where navigation='true'
+ 	</select>
+ 	<insert id="inserttype" parameterType="StoreType">
+ 		insert into typenum(type_name,field,navigation,navigationNum)values(#{type_name},#{field},#{navigation},#{navigationNum})
+ 	</insert>
+ 	<select id="getStoreTypeByID" parameterType="StoreType" resultType="StoreType">
+ 		select * from typenum where id=#{id}
+ 	</select>
+ 	<update id="updatetype" parameterType="StoreType">
+ 		update typenum <trim prefix="set" suffixOverrides="," suffix="where id=#{id}">
+ 			<if test="type_name!=null">
+ 				type_name=#{type_name},
+ 			</if>
+ 			<if test="field!=null">
+ 				field=#{field},
+ 			</if>
+ 			<if test="navigation!=null">
+ 				navigation=#{navigation},
+ 			</if>
+ 			<if test="navigationNum!=null">
+ 				navigationNum=#{navigationNum}
+ 			</if>
+ 		</trim>
+ 	</update>
+ 	<delete id="deleteStoreType" parameterType="int">
+ 		delete from typenum where id=#{sid}
+ 	</delete>
+ 	<delete id="deleteStoreByStoreTypeId" parameterType="int">
+ 		delete from product where id=#{sid}
+ 	</delete>
+ 	
+ 	<delete id="deleteAllSt" parameterType="String">
+	delete from typenum where id in 
+		<foreach collection="array" item="ids" index="index"
+               open="(" close=")" separator=",">
+        		'${ids}'
+      	</foreach>
+	</delete>
+	<select id="getStore" resultType="StoreAndType">
+ 		SELECT s.id,p_name,type_name,p_href,weight,imgName,merchantsnavigation,merchantsnavigationpriority,Businessesin,Recommendbusinessman,Recommendbusinessmanpriority FROM product s LEFT JOIN  typenum t on s.p_type=t.id order by weight
+ 	</select>
+ 	<select id="getType" resultType="StoreType">
+ 		select * from typenum
+ 	</select>
+ 	<!-- 添加商品 -->
+ 	<insert id="insertStore" parameterType="Store">
+ 		insert into product (p_name,p_href,p_type,weight,imgName,merchantsnavigation,merchantsnavigationpriority,Businessesin,Recommendbusinessman,Recommendbusinessmanpriority) values (#{p_name},#{p_href},#{p_type},#{weight},#{imgName},#{merchantsnavigation},#{merchantsnavigationpriority},#{Businessesin},#{Recommendbusinessman},#{Recommendbusinessmanpriority})
+ 	</insert>
+ 	<select id="getStoreByID" parameterType="Store" resultType="StoreAndType">
+ 		select * from product p left join typenum t on p.p_type=t.id where p.id=#{id}
+ 	</select>
+ 	<select id="getTypeID" parameterType="String" resultType="int">
+ 		select id from typenum where type_name=#{type_name} 
+ 	</select>
+ 	<update id="updateStore" parameterType="Store" >
+ 		update product set p_name=#{p_name},p_href=#{p_href},p_type=#{p_type},weight=#{weight},imgName=#{imgName},merchantsnavigation=#{merchantsnavigation},merchantsnavigationpriority=#{merchantsnavigationpriority},Businessesin=#{Businessesin},Recommendbusinessman=#{Recommendbusinessman},Recommendbusinessmanpriority=#{Recommendbusinessmanpriority} where id=#{id}
+ 	</update>
+ 	<delete id="deleteStore" parameterType="int">
+ 		delete from product where id=#{sid}
+ 	</delete>
+ 	<delete id="deleteAllStore" parameterType="String">
+	delete from product where id in 
+		<foreach collection="array" item="ids" index="index"
+               open="(" close=")" separator=",">
+        		'${ids}'
+      	</foreach>
+	</delete>
+</mapper>

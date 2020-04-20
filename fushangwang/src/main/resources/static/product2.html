@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>农非凡-产品列表</title>
+	</head>
+	<link rel="stylesheet" href="css/index.css" />
+	<script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript" src="js/jQuery-jcMarquee.js"></script>
+	<script type="text/javascript" src="js/top.js"></script>
+	<script type="text/javascript" src="js/themeColor.js"></script>
+	<script type="text/javascript" src="js/productphone.js"></script>
+	<script type="text/javascript" src="js/indexData.js"></script>
+
+	<body>
+    <div class="pohead">
+		<header>
+			<div class="div_head">
+				<ul>
+                	<div class="dol">
+					<li class="color_txt color_ty">主题颜色</li>                    
+                    <li class="color_fense theme_color" value="0"></li>
+                    <li class="color_lanse theme_color" value="1"></li>
+                    <li class="color_lvsse theme_color" value="2"></li>
+                    </div>
+					<li class="welcometext">欢迎来到农非凡</li>
+					<li class="local">www.nff123.com</li>
+				</ul>
+			</div>
+		</header>
+
+			<!--
+        	作者：offline
+        	时间：2019-08-28
+        	描述：页面主体
+        -->
+			<div class="body">
+				<!--
+            	作者：offline
+            	时间：2019-08-28
+            	描述：logo部分
+            -->
+				<div class="div_logo">
+					<a href="index.html"><img src="img/logonff.png" /></a>
+				</div>
+				<!--
+            	作者：offline
+            	时间：2019-08-28
+            	描述：搜索栏
+            -->
+                <div class="body_search">
+                    <form action="search" method="post">
+                        <input type="text" class="search" name="p_name"/><input type="submit" class="search_submit" value="搜索"/>
+                    </form>
+                </div>
+				<!--
+            	作者：offline
+            	时间：2019-08-29
+            	描述：联系方式
+            -->
+				<div class="phone">
+					<img src="img/phone_call.png" />
+					<div>
+						<span class="servicetime">服务时间：<span class="time">早9:30-晚5:30</span></span><br />
+						<span class="phobe_number">15288879672</span>
+					</div>
+				</div>
+			</div>
+			<div class="nav">
+				<span class="nav_index"><a href="index.html">首页</a></span><span class="nav_product">--产品列表</span>
+			</div>
+			<script type="text/javascript">
+				function getQueryString(name){
+				     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+				     var r = window.location.search.substr(1).match(reg);
+				     if(r!=null)return  unescape(r[2]); return null;
+				}
+				$(document).ready(function(){
+					var id =getQueryString("id");
+					$.ajax({
+						type:"post",
+						url:"getStoreByTypeID",
+						data:{"id":id},
+						dataType:"json",
+						success:function(result){
+							var store=result.getstore;
+							$.each(store,function(index,item){
+								$(".product_list").append(" <div class='productsingle'><ul><li style='height: 250px;'><img src='images/banner3.jpg' /></li><li title='"+item.p_name+"'>"+item.p_name+"</li><a href='"+item.p_href+"'><li title='"+item.p_href+"'>"+item.p_href+"</li></a></ul></div>");
+							})
+						}
+					});
+				});
+				
+			</script>
+			<div class="product_list">
+			</div>
+	<footer>
+		<div class="foot">
+			<div class="wechat_foot">
+				<img src="images/erweima.png" />
+			</div>
+			<div class="web" style="">
+				<span class="bq">农非凡版权所有 © 2019</span>
+				<span class="ba">   豫ICP备xxxxx号</span><br><br>
+				<span>技术支持：青岛华俄网络科技有限公司</span><br /><br>
+				<div class="sm">
+					<span>《版权声明》</span>
+				</div>
+			</div>
+		</div>
+	</footer>
+		</div>
+		<!--cookie插件-->
+		<script type="text/javascript" src="js/jquery.cookie.js"></script>
+	</body>
+
+</html>

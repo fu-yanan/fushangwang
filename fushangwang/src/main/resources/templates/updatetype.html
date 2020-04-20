@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>商家类目管理-农非凡v2.0</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon
+    " />
+<link rel="stylesheet" href="css/font.css">
+<link rel="stylesheet" href="css/xadmin.css">
+<link rel="stylesheet" type="text/css" href="lib/layui/css/layui.css">
+<script src="js/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/xadmin.js"></script>
+<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="form-wrap">
+
+	<div class="layui-fluid">
+		<div class="layui-card">
+			<div class="layui-card-header">添加信息</div>
+			<div class="layui-card-body" style="padding: 15px;">
+				<form class="layui-form" action="" lay-filter="component-form-group">
+					<div class="layui-form-item" hidden="hidden">
+						<label class="layui-form-label">id</label>
+						<div class="layui-input-block">
+							<input type="text" name="id" lay-verify="required"
+								placeholder="请输入" autocomplete="off" class="layui-input"
+								th:attr="value=${st.id}">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">类目名称</label>
+						<div class="layui-input-block">
+							<input type="text" name="type_name" lay-verify="required"
+								placeholder="请输入" autocomplete="off" class="layui-input"
+								th:attr="value=${st.type_name}">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">展示到导航</label>
+						<div class="layui-input-block">
+							<input type="checkbox" class="ation" name="navigation"
+								lay-filter="merchantsnavigation" lay-skin="switch"
+								lay-text="ON|OFF" th:attr="checked=${st.navigation}">
+						</div>
+					</div>
+					<div class="layui-form-item priority1">
+						<label class="layui-form-label">输入优先级</label>
+						<div class="layui-input-inline">
+							<input type="number" name="navigationNum" placeholder="请输入"
+								autocomplete="off" class="layui-input" th:attr="value=${st.navigationNum}">
+						</div>
+						<font color="red">*数字越高，商家显示的越靠前</font>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">展示到栏位</label>
+						<div class="layui-input-block">
+							<input type="checkbox" class="ation" name="field"
+								lay-filter="field" lay-skin="switch"
+								lay-text="ON|OFF" th:attr="checked=${st.field}">
+						</div>
+					</div>
+					<div class="layui-form-item layui-layout-admin">
+						<div class="layui-input-block">
+							<div class="layui-footer" style="left: 0;">
+								<button class="layui-btn" lay-submit=""
+									lay-filter="component-form-demo1">立即提交</button>
+								<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="lib/layui/layui.js" charset="utf-8"></script>
+	<script>
+		$(".priority1").hide();
+		var fa=false;
+		var flag1 = $("[name=navigation]").attr("checked");
+		if (flag1 == "checked") {
+			$(".priority1").show();
+			fa=true;
+		}
+		var path;
+		layui.use('form', function() {
+			var form = layui.form;
+			form.render(null, 'component-form-group');
+			/* 监听开关框 */
+			var flag;
+			form.on('switch(merchantsnavigation)', function(data) {
+				flag = this.checked ? true : false;
+				if (flag) {
+					$(".priority1").show();
+				} else {
+					$(".priority1").hide();
+				}
+			});
+			/* 监听提交 */
+			form.on('submit(component-form-demo1)', function(data) {
+				if(flag&&fa==false){
+					$.ajax({
+						url : 'typeNum',
+						type : 'post',
+						data : data.field,
+						dataType : 'JSON',
+						success : function(res) {
+							console.log(res);
+							if(res==false){
+								console.log("222");
+								layer.msg("导航最多显示四个，请下架其他导航");
+								return res;
+							}else{
+								$.ajax({
+									url : 'updatetype',
+									type : 'post',
+									data : data.field,
+									dataType : 'JSON',
+									success : function(res) {
+										if (res.rescode > 0) {
+											layer.load();
+											layer.alert("保存成功,点击右上角刷新按钮查看", {
+												icon : 6
+											});
+											//此处演示关闭
+											setTimeout(function() {
+												layer.closeAll('loading');
+												x_admin_close();
+												window.parent.location.reload();
+											}, 2000);/*  */
+
+										} else {
+											layer.msg("模块升级中，稍后重试")
+										}
+									},
+									error : function(data) {
+										layer.msg("服务器开小差了！请稍后再试");
+									}
+								});
+							}
+						}
+					})
+				}else{
+					$.ajax({
+						url : 'updatetype',
+						type : 'post',
+						data : data.field,
+						dataType : 'JSON',
+						success : function(res) {
+							if (res.rescode > 0) {
+								layer.load();
+								layer.alert("保存成功,点击右上角刷新按钮查看", {
+									icon : 6
+								});
+								//此处演示关闭
+								setTimeout(function() {
+									layer.closeAll('loading');
+									x_admin_close();
+									window.parent.location.reload();
+								}, 2000);
+
+							} else {
+								layer.msg("模块升级中，稍后重试")
+							}
+						},
+						error : function(data) {
+							layer.msg("服务器开小差了！请稍后再试");
+						}
+					});
+				}
+				
+				
+				return false;
+			});
+		});
+	</script>
+
+
+	<style id="LAY_layadmin_theme">
+.layui-side-menu, .layadmin-pagetabs .layui-tab-title li:after,
+	.layadmin-pagetabs .layui-tab-title li.layui-this:after,
+	.layui-layer-admin .layui-layer-title, .layadmin-side-shrink .layui-side-menu .layui-nav>.layui-nav-item>.layui-nav-child
+	{
+	background-color: #20222A !important;
+}
+
+.layui-nav-tree .layui-this, .layui-nav-tree .layui-this>a,
+	.layui-nav-tree .layui-nav-child dd.layui-this, .layui-nav-tree .layui-nav-child dd.layui-this a
+	{
+	background-color: #009688 !important;
+}
+
+.layui-layout-admin .layui-logo {
+	background-color: #20222A !important;
+}
+</style>
+</body>
+
+
+</html>

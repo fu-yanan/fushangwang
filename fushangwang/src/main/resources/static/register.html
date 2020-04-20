@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>农非凡-注册</title>
+	</head>
+	<link rel="stylesheet" href="css/index.css" />
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="js/regist.js" ></script>
+	<script src="js/themeColor.js"></script>
+	<script type="text/javascript" src="js/indexphone.js"></script>
+
+	<body>
+			<div style="width: 80%; height: auto;margin: 0 auto;">
+
+		<header>
+			<div class="div_head">
+				<ul>
+					<li style="width: 60px;line-height:10px ;font-size: 8px;color: lightgray;">主题颜色</li>
+					<a href="javascript:;"><li style=" background-color: pink;" class="theme_color" value="0"></li></a>
+					<a href="javascript:;"><li style="background-color: deepskyblue;" class="theme_color" value="1"></li></a>
+					<a href="javascript:;"><li style="background-color: #1DA91D;" class="theme_color" value="2"></li></a>
+					<li style="width: 10%;line-height: 10px;font-size: 12px;text-align: center;">欢迎来到农非凡</li>
+					<li style="width: 55%;line-height: 10px;text-align: center;font-weight: 700;">www.nff123.com</li>
+				</ul>
+			</div>
+		</header>
+		<div class="body">
+			<!--
+            	作者：offline
+            	时间：2019-08-28
+            	描述：logo部分
+            -->
+			<div class="div_logo">
+				<a href="index.html"><img src="img/logonff.png" /></a>
+			</div>
+			<!--
+            	作者：offline
+            	时间：2019-08-28
+            	描述：搜索栏
+            -->
+			<div class="body_search">
+				<form action="search" method="post">
+					<span><input type="text" class="search"/></span>
+					<span><input type="submit" class="search_submit" value="搜索"/></span>
+				</form>
+			</div>
+			<!--
+            	作者：offline
+            	时间：2019-08-29
+            	描述：联系方式
+            -->
+			<div class="phone">
+				<img src="img/phone_call.png" />
+				<div>
+					<span class="servicetime">服务时间：<span class="time">早9:30-晚5:30</span></span><br />
+					<span class="phobe_number">15288879672</span>
+				</div>
+			</div>
+		</div>
+		<div class="regist_nav">
+			<span class="nav_index"><a href="index.html">首页</a></span><span class="nav_product">-欢迎注册</span>
+		</div>
+
+		<div class="regist_form">
+
+			<span>*号为必填项，请如实填写您的真实信息，以便于管理员审核</span><br />
+			<div class="form_input">
+				<form class="form1" method="post" action="register" enctype="multipart/form-data" >
+				<span>*</span><input type="text" placeholder="真实姓名"  name="username" id="username"/><br />
+				<span>*</span><input type="text" placeholder="手机号" name="phone" id="phone"/><br />
+				<span>*</span><input type="text" placeholder="身份证号" name="idcard" id="idcard"/><br />
+				<span>*</span>
+					<select name="province" id="province">
+						<option value="请选择">请选择</option>
+					</select>
+					<select name="city" id="city">
+						<option value="请选择">请选择</option>
+					</select>
+					<select name="town" id="town">
+						<option value="请选择">请选择</option>
+					</select>
+				<br />
+				<span>*</span><input type="text" placeholder="详细地址" name="local"/><br />
+			</div>
+			<br />
+			<span>填写其它认证项有助于提高审核通过率</span><br />
+				上传清晰身份证：<input type="file" name="idcard_img" /><br />
+				上传营业执照照片：<input type="file" name="liscese_img"/><br/>
+				<input type="submit" value="提交信息" style="margin-top: 15px;height: 30px;width: 250px;color: white;" class="tj"/>
+			</form>
+			
+		</div>
+	<footer>
+		<div class="foot" style="margin-top: 500px;">
+			<div class="wechat_foot">
+				<img src="images/erweima.png" />
+			</div>
+			<div class="web" style="float: left; font-size: 12px; color: white;margin-top: 35px;margin-left:300px;text-align: center;">
+				<span>农非凡版权所有 © 2019</span>
+				<span>主办：农非凡   豫ICP备xxxxx号</span><br><br>
+				<span>技术支持：青岛华俄网络科技有限公司</span><br /><br>
+				<span>版权声明</span><span>|</span><span>注册声明</span><span>|</span><span >免责声明</span>
+			</div>
+		</div>
+	</footer>
+	</div>
+	</body>
+	<script src="js/area.js"></script>
+	<script src="js/select.js"></script>
+	<script type="text/javascript" src="js/jquery.cookie.js" ></script>
+</html>

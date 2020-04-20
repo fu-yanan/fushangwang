@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.huae.dao.UserDao">
+ 	<select id="getUser" resultType="User">
+ 		select * from user
+ 	</select>
+ 	<delete id="deleteUser" parameterType="int">
+ 		delete from user where id=#{uid}
+ 	</delete>
+ 	<delete id="deleteAllUser" parameterType="String">
+	delete from user where id in 
+		<foreach collection="array" item="ids" index="index"
+               open="(" close=")" separator=",">
+        		'${ids}'
+      	</foreach>
+	</delete>
+	<select id="getUserByStatus" resultType="User">
+ 		select * from user where status=0 
+ 		or status=2 order by id desc
+ 	</select>
+ 	<select id="getUserByID" parameterType="int" resultType="User">
+ 		select * from user where id=#{uid}
+ 	</select>
+ 	<update id="updateUser" parameterType="User" >
+ 		update user set username=#{username},idcard=#{idcard},realname=#{realname},email=#{email},sex=#{sex},phone=#{phone},comefrom=#{comefrom} where id=#{id}
+ 	</update>
+ 	<update id="updatestatus" parameterType="int">
+ 		update user set status=1 where id=#{uid}
+ 	</update>
+ 	<update id="updateRefuse" parameterType="int">
+ 		update user set status=0 where id=#{uid}
+ 	</update>
+ 	<select id="sreachUser" resultType="User" parameterType="User">
+ 		select * from user where username like '%${username}%'
+ 	</select>
+ 	<select id="getPW" resultType="Manager" parameterType="String">
+ 		select * from manager where m_password=#{pw}
+ 	</select>
+ 	<update id="updatePW" parameterType="String">
+ 		update manager set m_password=#{new_pw}
+ 	</update>
+ 	<insert id="regist" parameterType="User">
+ 		insert into user(username,idcard,comefrom,status,phone,jointime,idcard_img,liscese_img) values(#{username},#{idcard},#{comefrom},#{status},#{phone},#{jointime},#{idcard_img},#{liscese_img}) 
+ 	</insert>
+</mapper>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.huae.dao.IndexWebDao">
+ 
+ 	<!-- 聚合SQL实现一对多 -->
+ 	<resultMap type="StoreType" id="sMap">
+ 		<id column="id" property="id"/>
+ 		<result column="type_name" property="type_name"/>
+ 		<collection property="storeList" column="id" ofType="Store" select="getStoreByID"></collection>
+ 	</resultMap>
+ 	<select id="getTypes" resultMap="sMap">
+ 		select * from typenum where field='true'
+ 	</select>
+ 	<select id="getStoreByID" parameterType="int" resultType="Store">
+ 		select * from product
+ 			<where>
+ 				p_type=#{p_type}
+ 			</where>
+ 	</select>
+ 	
+ 	<!-- 获取网站设置数据信息 -->
+ 	<select id="getWebMessage" resultType="WebMessageConfig">
+ 		select * from webmessageconfig
+ 	</select>
+	<select id="getVedio" resultType="Vedio">
+ 		select * from vedioconfig order by weight
+	</select>
+	<select id="getType" resultType="StoreType">
+ 		select * from typenum
+	</select>
+ 	<select id="getCountUser" resultType="int">
+ 		select count(*) from user
+ 	</select>
+ 	<select id="getCountManager" resultType="int">
+ 		select count(*) from manager
+ 	</select>
+ 	<select id="getCountType" resultType="CountData">
+	SELECT COUNT(*) count,t.type_name FROM product p  LEFT JOIN typenum t ON p.p_type=t.id GROUP BY p.p_type 	
+	</select>
+	<select id="getBannerMessage" resultType="BannerConfig">
+	select * from bannerconfig order by carousel
+	</select>
+	<select id="bannerNum" resultType="java.lang.Integer">
+	select count(*) from bannerconfig where carousel='true'
+	</select>
+	<insert id="inserbanner" parameterType="BannerConfig">
+	insert into bannerconfig(b_name,weight,b_path,carousel)values(#{b_name},#{weight},#{b_path},#{carousel})
+	</insert>
+	<select id="getBannerID" parameterType="BannerConfig" resultType="int">
+	select id from bannerconfig where b_name=#{b_name} and weight=#{weight}
+	</select>
+	<!-- 更新图片path数据 -->
+	<update id="updateBanner" parameterType="BannerConfig">
+	update bannerconfig set b_img=#{b_img} where id=#{id}
+	</update>
+	<!-- 通过ID获取banner信息 -->
+	<select id="getBannerByID" parameterType="int" resultType="BannerConfig">
+	select * from bannerconfig where id=#{b_id}
+	</select>
+	<!-- 更新banner数据 -->
+	<update id="updatebannermessage" parameterType="BannerConfig">
+	update bannerconfig set b_name=#{b_name},b_path=#{b_path},weight=#{weight},carousel=#{carousel} where id=#{id}
+	</update>
+	<!-- 删除单条banner -->
+	<delete id="deletebanner" parameterType="BannerConfig">
+	delete from bannerconfig where id=#{id}
+	</delete>
+	<!-- 批量删除 -->
+	<delete id="deleteallbanner" parameterType="String">
+	delete from bannerconfig where id in 
+		<foreach collection="array" item="ids" index="index"
+               open="(" close=")" separator=",">
+        		'${ids}'
+      	</foreach>
+	</delete>
+	<!-- 以下sql为查询主页数据显示 -->
+	<select id="getBannerMessageByW" resultType="BannerConfig">
+	select * from bannerconfig order by weight limit 10
+	</select>
+	<select id="getTypeByW" resultType="Store">
+	SELECT * FROM product p  LEFT JOIN typenum t ON p.p_type=t.id GROUP BY p.p_type 	
+	</select>
+	<select id="getStore" resultType="Store">
+	select * from product order by id desc limit 0,10
+	</select>
+	<select id="getStore2" resultType="Store">
+	select * from product order by weight limit 0,20
+	</select>
+	<select id="getStoreBySearch" resultType="Store" parameterType="Store">
+	select * from product where p_name like '%${p_name}%'
+	</select>
+	<select id="getHomeData" resultType="WebMessageConfig">
+	select * from webmessageconfig
+	</select>
+	<select id="getDH" resultType="StoreType">
+	select * from typenum where navigation=true order by navigationNum
+	</select>
+	<select id="getDH2" resultType="Store">
+	select * from product where merchantsnavigation=true order by merchantsnavigationpriority
+	</select>
+	<select id="getStoreByTypeID" resultType="Store" parameterType="int">
+	select * from product where merchantsnavigation=true and p_type=#{id} order by merchantsnavigationpriority
+	</select>
+	<select id="getNEWProduct" resultType="Store">
+	select * from product where Businessesin=true
+	</select>
+	<select id="getTJProduct" resultType="Store">
+	select * from product where Recommendbusinessman=true order by Recommendbusinessmanpriority
+	</select>
+	<select id="getStatement" resultType="Statement">
+	select * from statement where status='是'
+	</select>
+	<select id="advertisingList" resultType="com.huae.bean.Advertising">
+		select * from advertising  where status='true' order by id desc limit 0,2
+	</select>
+	<update id="updateAdvertisingToStatusByNameIsColor" parameterType="String">
+		update advertising set status='false' where advertisingName != 'color'
+	</update>
+	<update id="updateAdvertisingToStatusNotNameIsColor" parameterType="String">
+		update advertising set status='false' where advertisingName = 'color'
+	</update>
+</mapper>

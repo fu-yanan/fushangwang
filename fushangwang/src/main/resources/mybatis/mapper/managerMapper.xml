@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.huae.dao.ManagerDao">
+ 	<select id="getLogin" parameterType="com.huae.bean.Manager" resultType="com.huae.bean.Manager">
+ 		select * from manager where m_name=#{m_name} and m_password=#{m_password}
+ 	</select>
+</mapper>

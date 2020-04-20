@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>农非凡-查看声明</title>
+</head>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+function getQueryString(name) {
+	 var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+	 var r = window.location.search.substr(1).match(reg);
+	 if (r != null)
+	  return unescape(r[2]);
+	 return null;
+	}
+	$(document).ready(function(){
+		var id=getQueryString("id");
+		$.ajax({
+			url:"getstatementByID",
+			type:"post",
+			data:{"id":id},
+			success:function(result){
+				var s=result.statement;
+				$("body").append(s.statementContext);
+			}
+		});
+		
+	});
+</script>
+<body>
+
+</body>
+</html>

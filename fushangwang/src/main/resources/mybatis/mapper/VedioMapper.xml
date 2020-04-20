@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.huae.dao.VedioDao">
+	<select id="getVedioList" resultType="Vedio">
+	select * from vedioconfig order by carousel
+	</select>
+	<select id="videoNum" resultType="java.lang.Integer">
+	select count(*) from vedioconfig where carousel='true'
+	</select>
+	<!-- 插入视频表单数据 -->
+	<insert id="inservideo" parameterType="Vedio">
+	insert into vedioconfig(v_name,v_path,carousel,weight) values(#{v_name},#{v_path},#{carousel},#{weight})
+	</insert>
+	<!-- 查询视频表单id -->
+	<select id="getVedioID" parameterType="Vedio" resultType="int">
+	select id from vedioconfig where v_name=#{v_name} and v_path=#{v_path} and weight=#{weight}
+	</select>
+	<!-- 更新图片视频数据 -->
+	<update id="updateVimg" parameterType="Vedio">
+	update vedioconfig set v_img=#{v_img},v_vedio=#{v_vedio} where id=#{id}
+	</update>
+	<!-- 根据id获取视频数据 -->
+	<select id="getvideoByid" parameterType="int" resultType="Vedio">
+	select * from vedioconfig where id=#{id}
+	</select>
+	<!-- 修改视频数据 -->
+	<update id="updatevideomessage" parameterType="Vedio">
+	update vedioconfig set v_name=#{v_name},v_path=#{v_path},weight=#{weight},carousel=#{carousel} where id=#{id}
+	</update>
+	<!-- 删除 -->
+	<delete id="deletevedio" parameterType="int">
+	delete from vedioconfig where id=#{id}
+	</delete>
+	<!-- 批量删除 -->
+	<delete id="deleteallvedio" parameterType="String">
+	delete from vedioconfig where id in 
+		<foreach collection="array" item="ids" index="index"
+               open="(" close=")" separator=",">
+        		'${ids}'
+      	</foreach>
+	</delete>
+</mapper>

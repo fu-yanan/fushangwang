@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>商家设置-农非凡v2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="css/font.css">
+    <link rel="stylesheet" href="css/xadmin.css">
+    <script src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  
+  <body>
+    <div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">设置</a>
+        <a>
+          <cite>类目管理</cite></a>
+      </span>
+      <a class="layui-btn layui-btn-primary layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:38px">ဂ</i></a>
+    </div>
+    <div class="x-body">
+      <div class="layui-row">
+        
+      </div>
+      <xblock>
+        <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
+        <button class="layui-btn" onclick="x_admin_show('添加用户','inserttype.html')"><i class="layui-icon"></i>添加类目</button>
+        <span class="x-right" style="line-height:40px">共有数据：<span th:text="${pageInfo.total}">88</span> 条</span>
+      </xblock>
+      <table class="layui-table">
+        <thead>
+          <tr>
+            <th>
+              <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
+            </th>
+            <th>类目名称</th>
+            <th>是否展示到导航</th>
+            <th>优先级</th>
+            <th>是否展示到栏位</th>
+            <th>操作</th>
+        </thead>
+        <tbody>
+          <tr th:each="s:${list_s}">
+            <td>
+              <div class="layui-unselect layui-form-checkbox" lay-skin="primary" th:attr="data-id=${s.id}"><i class="layui-icon">&#xe605;</i></div>
+            </td>
+            <td th:text="${s.type_name}"></td>
+            <td th:text="${s.navigation}=='true' ? '是 '  :   '否'  "></td>
+            <td th:text="${s.navigationNum}"></td>
+            <td th:text="${s.field}=='true' ? '是 '  :   '否'  "></td>
+            <td class="td-manage">
+            
+              <a title="编辑"  th:onclick="x_admin_show('编辑','getStoreTypeByID?id=[[${s.id}]]')" href="javascript:;">
+                <i class="layui-icon">&#xe642;</i>
+              </a>
+              <a title="删除" th:onclick="member_del(this,'[[${s.id}]]')" href="javascript:;">
+                <i class="layui-icon">&#xe640;</i>
+              </a>
+            </td>
+          </tr>
+           
+        </tbody>
+      </table>
+      <div class="page">
+        <div>
+        当前第<span th:text=${pageInfo.pageNum}></span>页，总共<span
+							th:text=${pageInfo.pages}></span>页。
+						<!-- 分页条 -->
+						<a href="getStoreType?pn=1">首页</a>
+						<!-- 上一页 -->
+						<span th:if="${pageInfo.hasPreviousPage}" style="margin-left: 20px"> <a
+							th:href="@{getStoreType(pn=${pageInfo.pageNum-1})}"
+							aria-lable="Previous"><font color="blue">上一页</font></a>
+
+						</span>
+
+						<!-- 下一页 -->
+						<span th:if="${pageInfo.hasNextPage}" style="margin-left: 20px"> <a
+							th:href="@{getStoreType(pn=${pageInfo.pageNum+1})}"
+							aria-lable="Next"><font color="blue"> 下一页</font> </a>
+
+						</span>
+						<!-- 尾页 -->
+						<a th:href="@{bannerconfig(pn=${pageInfo.pages})}" style="margin-left: 20px">尾页</a>
+        </div>
+      </div>
+
+    </div>
+    <script>
+      layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#end' //指定元素
+        });
+      });
+
+    
+
+      /*用户-删除*/
+      function member_del(obj,id){
+          layer.confirm('该操作会删除该类别下所有数据，确认删除吗？',function(index){
+              //发异步删除数据
+              $.ajax({
+ 			  		url:'deleteStoreType',
+ 			  		type:'post',
+ 			  		data:{"id":id},
+ 			  		dataType:"json",
+ 			  		success:function(res){
+ 			  			if(res.rescode>0){
+ 			  				console.log("delete success");
+ 			  				layer.msg('已删除!',{icon:1,time:1000});
+ 			  			 	$(obj).parents("tr").remove();
+ 			  			}
+ 			  		}
+ 			  		
+ 		  		});
+              
+          });
+      }
+
+
+
+      function delAll (argument) {
+
+        var ids = tableCheck.getData();
+  
+        layer.confirm('该操作会删除该类别下所有数据，确认删除吗？',function(index){
+            //捉到所有被选中的，发异步进行删除
+             $.ajax({
+ 			  		url:'deleteAllSt',
+ 			  		type:'post',
+ 			  		data:{ids:ids},
+ 			  		dataType:"json",
+ 			  		traditional:true,
+ 			  		success:function(res){
+ 			  			if(res.rescode>0){
+ 			  				console.log("delete success");
+ 			  				layer.msg('删除成功', {icon: 1});
+ 			  				$(".layui-form-checked").not('.header').parents('tr').remove();
+ 			  			}else{
+ 			  				layer.msg('删除失败，请检查网络');
+ 			  			}
+ 			  		}
+ 			  		
+ 		  		});
+            
+           
+        });
+      }
+    </script>
+  </body>
+
+</html>

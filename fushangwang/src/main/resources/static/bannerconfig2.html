@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>网站信息设置-农非凡v2.0</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon
+    " />
+<link rel="stylesheet" href="css/font.css">
+<link rel="stylesheet" href="css/xadmin.css">
+<link rel="stylesheet" type="text/css" href="lib/layui/css/layui.css">
+<script src="js/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/xadmin.js"></script>
+<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="form-wrap">
+	<div class="layui-fluid">
+		<div class="layui-card">
+			<div class="layui-card-header">添加信息</div>
+			<div class="layui-card-body" style="padding: 15px;">
+				<form class="layui-form" action="" lay-filter="component-form-group">
+					<div class="layui-form-item">
+						<label class="layui-form-label">名称</label>
+						<div class="layui-input-block">
+							<input type="text" name="b_name" lay-verify="required"
+								placeholder="请输入" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">网址</label>
+						<div class="layui-input-block">
+							<input type="text" name="b_path" lay-verify="required"
+								placeholder="http://或者https://开头 " autocomplete="off"
+								class="layui-input">
+						</div>
+					</div>
+					<div class="layui-upload" style="margin-left: 110px;">
+						<button type="button" class="layui-btn" id="test1">上传图片</button>
+						<div class="layui-upload-list">
+							<img class="layui-upload-img" id="demo1">
+							<p id="demoText"></p>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">加入轮播图</label>
+						<div class="layui-input-block">
+							<input type="checkbox" class="ation" name="carousel"
+								lay-filter="merchantsnavigation" lay-skin="switch"
+								lay-text="ON|OFF">
+						</div>
+					</div>
+					<div class="layui-form-item priority1">
+						<label class="layui-form-label">输入优先级</label>
+						<div class="layui-input-inline">
+							<input type="number" name="weight" placeholder="请输入"
+								autocomplete="off" class="layui-input">
+						</div>
+						<font color="red">*数字越高，商家显示的越靠前</font>
+					</div>
+					<div class="layui-form-item layui-layout-admin">
+						<div class="layui-input-block">
+							<div class="layui-footer" style="left: 0;">
+								<button class="layui-btn" lay-submit=""
+									lay-filter="component-form-demo1">立即提交</button>
+								<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="lib/layui/layui.js" charset="utf-8"></script>
+	<script>
+		$(".priority1").hide();
+		var path;
+		layui
+				.use(
+						[ 'upload', 'form' ],
+						function() {
+							var $ = layui.jquery, upload = layui.upload;
+							var form = layui.form;
+							form.render(null, 'component-form-group');
+							/* 监听开关框 */
+							var flag;
+							form.on('switch(merchantsnavigation)', function(
+									data) {
+								flag = this.checked ? true : false;
+								if (flag) {
+									$(".priority1").show();
+								} else {
+									$(".priority1").hide();
+								}
+							});
+							//普通图片上传
+							var uploadInst = upload
+									.render({
+										elem : '#test1',
+										url : 'img',
+										before : function(obj) {
+											//预读本地文件示例，不支持ie8
+											obj
+													.preview(function(index,
+															file, result) {
+														$('#demo1').attr('src',
+																result); //图片链接（base64）
+														path = result;
+														console.log(result)
+													});
+										},
+										done : function(res) {
+											//如果上传失败
+											if (res.code > 0) {
+												return layer.msg('上传失败');
+											}
+											//上传成功
+										},
+										error : function() {
+											//演示失败状态，并实现重传
+											var demoText = $('#demoText');
+											demoText
+													.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+											demoText.find('.demo-reload').on(
+													'click', function() {
+														uploadInst.upload();
+													});
+										}
+									});
+
+							/* 监听提交 */
+							form
+									.on(
+											'submit(component-form-demo1)',
+											function(data) {
+												if(flag){
+													$.ajax({
+														url : 'bannerNum',
+														type : 'post',
+														data : data.field,
+														dataType : 'JSON',
+														success : function(res) {
+															console.log(res);
+															if(res==false){
+																console.log("222");
+																layer.msg("轮播最多显示5个，请下架其他轮播");
+																return res;
+															}else{
+																$.ajax({
+																	url : 'insertbanner',
+																	type : 'post',
+																	data : data.field,
+																	dataType : 'JSON',
+																	success : function(
+																			res) {
+																		if (res.b_id > 0) {
+																			/*表单提交后传递图片url到数据库*/
+																			var id = res.b_id; //获取表单存储的数据id
+																			$
+																					.ajax({
+																						url : 'insertbannerimg',
+																						type : 'post',
+																						data : {
+																							"path" : path,
+																							"id" : id
+																						},
+																						dataType : "json",
+																						success : function(
+																								res) {
+																							if (res.flag == "1") {
+																								console
+																										.log("img upload success");
+																							}
+																						}
+
+																					});
+
+																			layer
+																					.load();
+																			layer
+																					.alert(
+																							"保存成功",
+																							{
+																								icon : 6
+																							});
+
+																			//此处演示关闭
+																			setTimeout(
+																					function() {
+																						layer
+																								.closeAll('loading');
+																						x_admin_close();
+																		   				  window.parent.location.reload();
+																					},
+																					2000);
+
+																		} else {
+																			layer
+																					.msg("模块升级中，稍后重试")
+																		}
+																	},
+																	error : function(
+																			data) {
+																		layer
+																				.msg("服务器开小差了！请稍后再试");
+																	}
+																});
+															}
+														}
+													})
+												}else{
+													$.ajax({
+														url : 'insertbanner',
+														type : 'post',
+														data : data.field,
+														dataType : 'JSON',
+														success : function(
+																res) {
+															if (res.b_id > 0) {
+																/*表单提交后传递图片url到数据库*/
+																var id = res.b_id; //获取表单存储的数据id
+																$
+																		.ajax({
+																			url : 'insertbannerimg',
+																			type : 'post',
+																			data : {
+																				"path" : path,
+																				"id" : id
+																			},
+																			dataType : "json",
+																			success : function(
+																					res) {
+																				if (res.flag == "1") {
+																					console
+																							.log("img upload success");
+																				}
+																			}
+
+																		});
+
+																layer
+																		.load();
+																layer
+																		.alert(
+																				"保存成功",
+																				{
+																					icon : 6
+																				});
+
+																//此处演示关闭
+																setTimeout(
+																		function() {
+																			layer
+																					.closeAll('loading');
+																			x_admin_close();
+															   				  window.parent.location.reload();
+
+																		},
+																		2000);
+
+															} else {
+																layer
+																		.msg("模块升级中，稍后重试")
+															}
+														},
+														error : function(
+																data) {
+															layer
+																	.msg("服务器开小差了！请稍后再试");
+														}
+													});
+												}
+												return false;
+											});
+						});
+	</script>
+
+
+	<style id="LAY_layadmin_theme">
+.layui-side-menu, .layadmin-pagetabs .layui-tab-title li:after,
+	.layadmin-pagetabs .layui-tab-title li.layui-this:after,
+	.layui-layer-admin .layui-layer-title, .layadmin-side-shrink .layui-side-menu .layui-nav>.layui-nav-item>.layui-nav-child
+	{
+	background-color: #20222A !important;
+}
+
+.layui-nav-tree .layui-this, .layui-nav-tree .layui-this>a,
+	.layui-nav-tree .layui-nav-child dd.layui-this, .layui-nav-tree .layui-nav-child dd.layui-this a
+	{
+	background-color: #009688 !important;
+}
+
+.layui-layout-admin .layui-logo {
+	background-color: #20222A !important;
+}
+</style>
+</body>
+
+
+</html>

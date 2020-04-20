@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>农非凡v2.0</title>
+<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript">
+	function getQueryString(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null)
+			return unescape(r[2]);
+		return null;
+	}
+	$(document)
+			.ready(
+					function() {
+						var id = getQueryString("id");
+						$
+								.ajax({
+									type : "post",
+									url : "getstatementByID",
+									data : {
+										"id" : id
+									},
+									dataType : "json",
+									success : function(result) {
+										$("body").append(result.statement.statementContext);
+									}
+								});
+					});
+</script>
+</head>
+<body>
+	
+</body>
+</html>

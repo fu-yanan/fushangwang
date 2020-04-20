@@ -1,0 +1,194 @@
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta charset="utf-8" />
+		<title>农非凡-首页</title>
+	</head>
+	<link rel="stylesheet" title="对于&quot;在浏览器中预览&quot;为禁用: css/index.css" />
+<style type="text/css">
+
+
+
+</style>
+	<script src="js/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript" src="js/jQuery-jcMarquee.js"></script>
+	<script type="text/javascript" src="js/top.js"></script>
+	<script type="text/javascript" src="js/themeColor.js" ></script>
+	<link rel="icon" href="img/down.png" type="image/x-icon" />
+	<script type="text/javascript" src="js/indexData.js"></script>
+	
+
+	<body>
+		<div style="width: 80%; height: auto;margin: 0 auto;">
+		<header>
+			<div class="div_head">
+				<ul>
+					<li style="width: 60px;line-height:10px ;font-size: 8px;color: lightgray;">主题颜色</li>
+					<a href="javascript:;"><li style=" background-color: pink;" class="theme_color" value="0"></li></a>
+					<a href="javascript:;"><li style="background-color: deepskyblue;" class="theme_color" value="1"></li></a>
+					<a href="javascript:;"><li style="background-color: #1DA91D;" class="theme_color" value="2"></li></a>
+					<li style="width: 10%;line-height: 10px;font-size: 12px;text-align: center;" class="welcometext">欢迎来到农非凡</li>
+					<li style="width: 55%;line-height: 10px;text-align: center;font-weight: 700;" class="local">www.nff123.com</li>
+				</ul>
+			</div>
+		</header>
+
+		<!--
+        	作者：offline
+        	时间：2019-08-28
+        	描述：页面主体
+        -->
+		<div class="body">
+			<!--
+            	作者：offline
+            	时间：2019-08-28
+            	描述：logo部分
+            -->
+			<div class="div_logo">
+				<a href="index.html"><img src="img/logonff.png" /></a>
+			</div>
+			<!--
+            	作者：offline
+            	时间：2019-08-28
+            	描述：搜索栏
+            -->
+			<div class="body_search">
+				<form action="search" method="post">
+					<span><input type="text" class="search" name="p_name"/></span>
+					<span><input type="submit" class="search_submit" value="搜索"/></span>
+				</form>
+			</div>
+			<!--
+            	作者：offline
+            	时间：2019-08-29
+            	描述：联系方式
+            -->
+			<div class="phone">
+				<img src="img/phone_call.png" />
+				<div>
+					<span class="servicetime">服务时间：<span class="time">早9:30-晚5:30</span></span><br />
+					<span class="phobe_number">15288879672</span>
+				</div>
+			</div>
+		</div>
+		
+		<div class="nav">
+			<ul class="dh">
+				<li style="width: 200px;margin-left:-40px;" class="line">
+					最新商家<div class="down">▼</div>
+				</li>
+				<li><a href="index.html" class="nav_href">首页</a></li>
+				
+			</ul>
+			<!--
+                	作者：offline
+                	时间：2019-08-29
+                	描述：下拉菜单
+                -->
+			<div class="div_section">
+				<ul class="dh2">
+
+
+				</ul>
+			</div>
+		</div>
+		
+		<div class="div_banner">
+			
+		</div>
+		<div class="point">
+			<ul>
+			</ul>
+		</div>
+		<div class="nav_hot">
+			<span>热销产品</span><span>HOT PRODUCTS</span>
+			<div id="mrq">
+				<!-- HTML注释 divcss5提示：特效DIV开始 -->
+				<div id="Marquee_x">
+					<ul>
+						<li>
+							
+						</li>
+					</ul>
+				</div>
+				<!-- divcss5提示：特效DIV结束 -->
+			</div>
+		</div>
+		<div class="nav_each">
+			
+		
+		</div>
+		
+		
+		<!--
+        	作者：offline
+        	时间：2019-08-29
+        	描述：悬浮窗
+        -->
+		<div class="floating_ck">
+			<dl>
+				<dt></dt>
+				<dd class="consult">
+					<span>入驻网站</span>
+					<div class="floating_left">
+						<a href="register.html">立即入驻</a>
+					</div>
+				</dd>
+				<dd class="qrcord">
+					<span>扫一扫</span>
+					<div class="floating_left floating_ewm">
+						<i><img src="images/erweima.png" /></i>
+						<p class="qrcord_p01">扫一扫<br>扫码赠送神秘大礼</p>
+						<p class="qrcord_p02">全国免费服务热线<br>
+							
+						</p>
+            </div>
+        </dd>
+        <dd class="return">
+        	<span onClick="gotoTop();return false;">返回顶部</span>
+        </dd>
+    </dl>
+	</div>
+	<div class="leftmar">
+		<div class="leftmar_title">
+			最新入驻商家&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Latest Residence
+		</div>
+		<div class="div_marquee" align="center">
+			<ul>
+				<marquee direction="up" height="320px" onmouseover=this.stop() onmouseout=this.start() class="mar">
+				</marquee>
+			</ul>
+		</div>
+	</div>
+	<div class="rightmar">
+		<div class="rightmar_title">
+			推荐商家&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recommendation Business
+		</div>
+		<div class="product_footer">
+			<ul>
+			</ul>
+		</div>
+	</div>
+	<footer>
+		<div class="foot">
+			<div class="wechat_foot">
+				<img src="images/erweima.png" />
+			</div>
+			<div class="web" style="">
+				<span class="bq">农非凡版权所有 © 2019</span>
+				<span class="ba">   豫ICP备xxxxx号</span><br><br>
+				<span>技术支持：青岛华俄网络科技有限公司</span><br /><br>
+				<div class="sm">
+					<span>《版权声明》</span>
+				</div>
+			</div>
+		</div>
+	</footer>
+	</div>
+	</body>
+	<!--cookie插件-->
+	<script type="text/javascript" src="js/indexphone.js" ></script>
+	<script type="text/javascript" src="js/jquery.cookie.js" ></script>
+</html>

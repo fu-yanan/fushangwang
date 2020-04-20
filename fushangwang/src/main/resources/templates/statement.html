@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>农非凡v2.0</title>
+<meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="css/font.css">
+    <link rel="stylesheet" href="css/xadmin.css">
+  <script src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/xadmin.js"></script>
+  <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">设置</a>
+        <a>
+          <cite>网站声明管理</cite></a>
+      </span>
+      <a class="layui-btn layui-btn-primary layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:38px">ဂ</i></a>
+    </div>
+    <div class="x-body">
+      <div class="layui-row">
+        
+      </div>
+      <xblock>
+        <button class="layui-btn" onclick="x_admin_show('添加网站声明','insertstatement.html')"><i class="layui-icon"></i>添加声明</button>
+      </xblock>
+	<table class="layui-table" id="demo" lay-filter="test"></table>
+	<script type="text/html" id="barDemo">
+  	<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+ 	<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+  	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+</div>
+	<script>
+	layui.use('table', function(){
+	  var table = layui.table;
+	  //监听工具条
+	  table.render({
+	    elem: '#demo'
+	    ,height: 312
+	    ,url: 'statementList' //数据接口
+	    ,width:"auto"
+	    ,page: false //开启分页
+	    ,cols: [
+	    	[ //表头
+	      {field: 'statementId', title: 'ID', width:80, sort: true, fixed: 'left'}
+	      ,{field: 'statementName', title: '声明名称', width:180}
+	      ,{field: 'statementText', title: '声明内容', width:680}
+	      ,{field: 'status', title: '是否显示', width:115}
+	      ,{fixed: 'right',title: '操作', width:278, align:'center', toolbar: '#barDemo'}
+	    	]
+	    ]
+	  });
+	  table.on('tool(test)', function(obj){
+		    var data = obj.data;
+		    if(obj.event === 'detail'){
+		    	x_admin_show('查看'+data.statementName+'声明','statementListById.html?id='+data.statementId);
+		    } else if(obj.event === 'del'){
+		      layer.confirm('真的删除行么', function(index){
+		    	  $.ajax({
+	 			  		url:'deleteStatementById',
+	 			  		type:'post',
+	 			  		data:{"id":data.statementId},
+	 			  		dataType:"json",
+	 			  		success:function(res){
+	 			  			if(res.rescode>0){
+	 			  				console.log("delete success");
+	 			  				layer.msg('已删除!',{icon:1,time:1000});
+	 			  				window.location.reload();
+	 			  			}
+	 			  		}
+	 			  		
+	 		  		});
+		        layer.close(index);
+		      });
+		    } else if(obj.event === 'edit'){
+		      x_admin_show('编辑'+data.statementName+'声明','statementupdateById.html?id='+data.statementId);
+		    }
+		  });
+	});
+</script>
+</body>
+</html>

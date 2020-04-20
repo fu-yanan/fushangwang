@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huae.dao.SetWebConfigDao">
+ 	<update id="setWebConfig" parameterType="WebMessageConfig">
+ 		update webmessageconfig set webip=#{webip},linename=#{linename},ba=#{ba},companyip=#{companyip},companyphone=#{companyphone},version=#{version},workdate=#{workdate},keywords=#{keywords},webrepresent=#{webrepresent},welcomewords=#{welcomewords} where id=1
+ 	</update>
+ 	<select id="getWebMessage" resultType="WebMessageConfig">
+ 		select * from webmessageconfig where id=1
+ 	</select>
+ 	<select id="statementList" resultType="com.huae.bean.Statement">
+ 		select * from statement order by status
+ 	</select>
+ 	<select id="statementTypeNum" resultType="int">
+ 		select count(*) from statement where status ='是'
+ 	</select>
+ 	<select id="advertisingNum" resultType="int">
+ 		select count(*) from advertising where status ='true'
+ 	</select>
+ 	<insert id="insertStatement" parameterType="com.huae.bean.Statement">
+ 		insert into statement(statementName,statementContext,statementText,status) values(#{statementName},#{statementContext},#{statementText},#{status})
+ 	</insert>
+ 	<update id="updateStatement" parameterType="com.huae.bean.Statement">
+ 		update statement <trim prefix="set" suffixOverrides="," suffix="where statementId=#{statementId}">
+ 			<if test="statementName!=null">
+ 				statementName=#{statementName},
+ 			</if>
+ 			<if test="statementContext!=null">
+ 				statementContext=#{statementContext},
+ 			</if>
+ 			<if test="statementText!=null">
+ 				statementText=#{statementText},
+ 			</if>
+ 			<if test="status!=null">
+ 				status=#{status}
+ 			</if>
+ 		</trim>
+ 	</update>
+ 	<select id="getstatementByID" parameterType="int" resultType="com.huae.bean.Statement">
+ 		select * from statement where statementId=#{id}
+ 	</select>
+ 	<delete id="deleteStatementById" parameterType="int">
+ 		delete from statement where statementId=#{sid}
+ 	</delete>
+ 	<select id="getAdvertising" resultType="com.huae.bean.Advertising">
+ 		SELECT * FROM Advertising  order by status
+ 	</select>
+ 	<insert id="insertAdvertising" parameterType="com.huae.bean.Advertising">
+ 		insert into advertising(advertisingName,imgUrl,advertisingUrl,status) values(#{advertisingName},#{imgUrl},#{advertisingUrl},#{status})
+ 	</insert>
+ 	
+ 	<select id="getAdvertisingByID" parameterType="com.huae.bean.Advertising" resultType="com.huae.bean.Advertising">
+ 		select * from advertising where id=#{id}
+ 	</select>
+ 	
+ 	<update id="updateAdvertising" parameterType="com.huae.bean.Advertising">
+ 		update advertising <trim prefix="set" suffixOverrides="," suffix="where id=#{id}">
+ 			<if test="advertisingName!=null">
+ 				advertisingName=#{advertisingName},
+ 			</if>
+ 			<if test="imgUrl!=null">
+ 				imgUrl=#{imgUrl},
+ 			</if>
+ 			<if test="advertisingUrl!=null">
+ 				advertisingUrl=#{advertisingUrl},
+ 			</if>
+ 			<if test="status!=null">
+ 				status=#{status}
+ 			</if>
+ 		</trim>
+ 	</update>
+ 	<delete id="deleteAllAdvertising" parameterType="String">
+	delete from advertising where id in 
+		<foreach collection="array" item="ids" index="index"
+               open="(" close=")" separator=",">
+        		'${ids}'
+      	</foreach>
+	</delete>
+	<delete id="deleteAdvertising" parameterType="int">
+ 		delete from advertising where id=#{sid}
+ 	</delete>
+ 	
+</mapper>
